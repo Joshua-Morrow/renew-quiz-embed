@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Take the Quiz</h2>
+    <form id="quizForm">
+        <!-- Question 1 (Category 1) -->
+        <div class="question">
+            <p>What is 2 + 2?</p>
+            <input type="radio" name="q1" value="Category1" data-correct="false">3<br>
+            <input type="radio" name="q1" value="Category1" data-correct="true">4<br>
+            <input type="radio" name="q1" value="Category1" data-correct="false">5<br>
+        </div>
+
+        <!-- Question 2 (Category 2) -->
+        <div class="question">
+            <p>What is the capital of France?</p>
+            <input type="radio" name="q2" value="Category2" data-correct="true">Paris<br>
+            <input type="radio" name="q2" value="Category2" data-correct="false">London<br>
+            <input type="radio" name="q2" value="Category2" data-correct="false">Berlin<br>
+        </div>
+
+        <!-- Add more questions for each category -->
+
+        <!-- Question 3 (Category 3) -->
+        <div class="question">
+            <p>What color is the sky?</p>
+            <input type="radio" name="q3" value="Category3" data-correct="true">Blue<br>
+            <input type="radio" name="q3" value="Category3" data-correct="false">Green<br>
+            <input type="radio" name="q3" value="Category3" data-correct="false">Red<br>
+        </div>
+
+        <!-- Question 4 (Category 4) -->
+        <div class="question">
+            <p>How many days are in a week?</p>
+            <input type="radio" name="q4" value="Category4" data-correct="true">7<br>
+            <input type="radio" name="q4" value="Category4" data-correct="false">5<br>
+            <input type="radio" name="q4" value="Category4" data-correct="false">6<br>
+        </div>
+
+        <button type="button" onclick="submitQuiz()">Submit Quiz</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script src="quiz.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.question {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#results {
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+
+
+
+
+
+function submitQuiz() {
+    const form = document.getElementById('quizForm');
+    const questions = form.querySelectorAll('.question');
+    let scores = {
+        Category1: { correct: 0, total: 0 },
+        Category2: { correct: 0, total: 0 },
+        Category3: { correct: 0, total: 0 },
+        Category4: { correct: 0, total: 0 }
+    };
+
+    questions.forEach(question => {
+        const inputs = question.querySelectorAll('input[type="radio"]');
+        inputs.forEach(input => {
+            if (input.checked) {
+                const category = input.value;
+                const isCorrect = input.getAttribute('data-correct') === 'true';
+
+                scores[category].total++;
+                if (isCorrect) {
+                    scores[category].correct++;
+                }
+            }
+        });
+    });
+
+    displayResults(scores);
+}
+
+function displayResults(scores) {
+    let resultText = '';
+    for (let category in scores) {
+        const score = scores[category];
+        const percentage = (score.correct / score.total) * 100;
+        resultText += `${category}: ${percentage.toFixed(2)}%<br>`;
+    }
+    document.getElementById('results').innerHTML = resultText;
+}
